@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <math.h>
+
+#define MAX 10
+
+double distance(double x1, double y1, double x2, double y2)
+{
+    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
+void swap(int *a, int *b)
+{
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+void permute(int arr[], int l, int r, double x[], double y[],
+             double *minDist, int bestPath[])
+{
+    if (l == r)
+    {
+        double dist = 0;
+
+        int prev = 0;
+
+        for (int i = 0; i < r; i++)
+        {
+            dist += distance(x[prev], y[prev], x[arr[i]], y[arr[i]]);
+            prev = arr[i];
+        }
+
+        dist += distance(x[prev], y[prev], x[0], y[0]);
+
+        if (dist < *minDist)
+        {
+            *minDist = dist;
+
+            for (int i = 0; i < r; i++)
+                bestPath[i] = arr[i];
+        }
+
+        return;
+    }
+
+    for (int i = l; i <= r; i++)
+    {
+        swap(&arr[l], &arr[i]);
+        permute(arr, l + 1, r, x, y, minDist, bestPath);
+        swap(&arr[l], &arr[i]);
+    }
+}
+
+int main()
+{
+    int n;
+
+    printf("Enter number of cities: ");
+    scanf("%d", &n);
+
+    double x[MAX], y[MAX];
+
+    printf("Enter city coordinates:\n");
+
+    for (int i = 0; i < n; i++)
+        scanf("%lf %lf", &x[i], &y[i]);
+
+    int arr[MAX];
+    int bestPath[MAX];
+
+    for (int i = 1; i < n; i++)
+        arr[i - 1] = i;
+
+    double minDist = 1e9;
+
+    permute(arr, 0, n - 2, x, y, &minDist, bestPath);
+
+    printf("\nShortest Distance = %.6lf\n", minDist);
+
+    printf("Shortest Path:\n");
+    printf("0 ");
+
+    for (int i = 0; i < n - 1; i++)
+        printf("%d ", bestPath[i]);
+
+    printf("0\n");
+
+    return 0;
+}
