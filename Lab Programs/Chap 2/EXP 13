@@ -1,0 +1,79 @@
+#include <stdio.h>
+
+void swap(int *a, int *b)
+{
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+int totalCost(int assign[], int cost[][10], int n)
+{
+    int sum = 0;
+
+    for (int i = 0; i < n; i++)
+        sum += cost[i][assign[i]];
+
+    return sum;
+}
+
+void permute(int assign[], int l, int r, int cost[][10], int n, int *minCost, int best[])
+{
+    if (l == r)
+    {
+        int current = totalCost(assign, cost, n);
+
+        if (current < *minCost)
+        {
+            *minCost = current;
+
+            for (int i = 0; i < n; i++)
+                best[i] = assign[i];
+        }
+
+        return;
+    }
+
+    for (int i = l; i <= r; i++)
+    {
+        swap(&assign[l], &assign[i]);
+        permute(assign, l + 1, r, cost, n, minCost, best);
+        swap(&assign[l], &assign[i]);
+    }
+}
+
+int main()
+{
+    int n;
+
+    printf("Enter number of workers/tasks: ");
+    scanf("%d", &n);
+
+    int cost[10][10];
+
+    printf("Enter cost matrix:\n");
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+            scanf("%d", &cost[i][j]);
+    }
+
+    int assign[10], best[10];
+
+    for (int i = 0; i < n; i++)
+        assign[i] = i;
+
+    int minCost = 1000000;
+
+    permute(assign, 0, n - 1, cost, n, &minCost, best);
+
+    printf("\nOptimal Assignment:\n");
+
+    for (int i = 0; i < n; i++)
+        printf("Worker %d -> Task %d\n", i + 1, best[i] + 1);
+
+    printf("Total Cost = %d\n", minCost);
+
+    return 0;
+}
