@@ -1,0 +1,54 @@
+#include <stdio.h>
+
+void swap(int *a, int *b)
+{
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+void sort(int a[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            if (a[i] > a[j])
+                swap(&a[i], &a[j]);
+        }
+    }
+}
+
+int kthSmallest(int arr[], int n, int k)
+{
+    sort(arr, n);
+    return arr[k - 1];
+}
+
+int main()
+{
+    int n, k;
+
+    printf("Enter array size: ");
+    scanf("%d", &n);
+
+    int arr[n];
+
+    printf("Enter array elements:\n");
+
+    for (int i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+
+    printf("Enter k: ");
+    scanf("%d", &k);
+
+    if (k < 1 || k > n)
+    {
+        printf("\nInvalid k");
+        return 0;
+    }
+
+    printf("\nKth Smallest Element = %d", kthSmallest(arr, n, k));
+
+    return 0;
+}
