@@ -1,0 +1,33 @@
+#include <stdio.h>
+
+long long karatsuba(long long x, long long y)
+{
+    if (x < 100 || y < 100)
+        return x * y;
+
+    long long a = x / 100;
+    long long b = x % 100;
+    long long c = y / 100;
+    long long d = y % 100;
+
+    long long p = karatsuba(a, c);
+    long long q = karatsuba(b, d);
+    long long r = karatsuba(a + b, c + d);
+
+    return p * 10000 + (r - p - q) * 100 + q;
+}
+
+int main()
+{
+    long long x, y;
+
+    printf("Enter first number: ");
+    scanf("%lld", &x);
+
+    printf("Enter second number: ");
+    scanf("%lld", &y);
+
+    printf("Product = %lld\n", karatsuba(x, y));
+
+    return 0;
+}
