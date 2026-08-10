@@ -1,0 +1,53 @@
+#include <stdio.h>
+
+struct Point
+{
+    int x;
+    int y;
+};
+
+int main()
+{
+    int n, k;
+
+    printf("Enter number of points: ");
+    scanf("%d", &n);
+
+    struct Point p[n];
+    int dist[n];
+
+    printf("Enter the points (x y):\n");
+
+    for (int i = 0; i < n; i++)
+    {
+        scanf("%d %d", &p[i].x, &p[i].y);
+        dist[i] = p[i].x * p[i].x + p[i].y * p[i].y;
+    }
+
+    printf("Enter k: ");
+    scanf("%d", &k);
+
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            if (dist[i] > dist[j])
+            {
+                int temp = dist[i];
+                dist[i] = dist[j];
+                dist[j] = temp;
+
+                struct Point t = p[i];
+                p[i] = p[j];
+                p[j] = t;
+            }
+        }
+    }
+
+    printf("\nClosest Points:\n");
+
+    for (int i = 0; i < k; i++)
+        printf("[%d, %d]\n", p[i].x, p[i].y);
+
+    return 0;
+}
