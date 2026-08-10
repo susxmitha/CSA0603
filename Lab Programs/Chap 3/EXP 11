@@ -1,0 +1,102 @@
+#include <stdio.h>
+
+void swap(int *a, int *b)
+{
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+void sort(int a[], int n)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            if (a[i] > a[j])
+                swap(&a[i], &a[j]);
+        }
+    }
+}
+
+int median(int a[], int n)
+{
+    sort(a, n);
+    return a[n / 2];
+}
+
+int selectK(int a[], int n, int k)
+{
+    if (n <= 5)
+    {
+        sort(a, n);
+        return a[k - 1];
+    }
+
+    int groups = (n + 4) / 5;
+    int medians[groups];
+
+    for (int i = 0; i < groups; i++)
+    {
+        int start = i * 5;
+        int size = n - start;
+
+        if (size > 5)
+            size = 5;
+
+        medians[i] = median(a + start, size);
+    }
+
+    int pivot = selectK(medians, groups, (groups + 1) / 2);
+
+    int left[n], right[n], equal[n];
+    int l = 0, r = 0, e = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        if (a[i] < pivot)
+            left[l++] = a[i];
+        else if (a[i] > pivot)
+            right[r++] = a[i];
+        else
+            equal[e++] = a[i];
+    }
+
+    if (k <= l)
+        return selectK(left, l, k);
+
+    if (k <= l + e)
+        return pivot;
+
+    return selectK(right, r, k - l - e);
+}
+
+int main()
+{
+    int n, k;
+
+    printf("Enter array size: ");
+    scanf("%d", &n);
+
+    int arr[n];
+
+    printf("Enter array elements:\n");
+
+    for (int i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+
+    printf("Enter k: ");
+    scanf("%d", &k);
+
+    if (k < 1 || k > n)
+    {
+        printf("\nInvalid k");
+        return 0;
+    }
+
+    int result = selectK(arr, n, k);
+
+    printf("\nKth Smallest Element = %d", result);
+
+    return 0;
+}
