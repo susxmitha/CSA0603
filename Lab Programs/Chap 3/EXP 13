@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int n, target;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    int arr[n];
+
+    printf("Enter array elements:\n");
+    for (int i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+
+    printf("Enter target sum: ");
+    scanf("%d", &target);
+
+    int total = 1 << n;
+    int bestMask = 0;
+    int bestSum = 0;
+    int bestDiff = abs(target);
+
+    for (int mask = 0; mask < total; mask++)
+    {
+        int sum = 0;
+
+        for (int i = 0; i < n; i++)
+        {
+            if (mask & (1 << i))
+                sum += arr[i];
+        }
+
+        int diff = abs(target - sum);
+
+        if (diff < bestDiff)
+        {
+            bestDiff = diff;
+            bestSum = sum;
+            bestMask = mask;
+        }
+    }
+
+    printf("\nClosest Subset: {");
+
+    int first = 1;
+
+    for (int i = 0; i < n; i++)
+    {
+        if (bestMask & (1 << i))
+        {
+            if (!first)
+                printf(", ");
+            printf("%d", arr[i]);
+            first = 0;
+        }
+    }
+
+    printf("}");
+    printf("\nSubset Sum = %d", bestSum);
+    printf("\nDifference = %d", bestDiff);
+
+    return 0;
+}
