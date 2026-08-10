@@ -1,0 +1,47 @@
+#include <stdio.h>
+
+int main()
+{
+    int n;
+    long long count = 0;
+
+    printf("Enter number of elements in each array: ");
+    scanf("%d", &n);
+
+    int A[n], B[n], C[n], D[n];
+
+    printf("Enter A:\n");
+    for (int i = 0; i < n; i++)
+        scanf("%d", &A[i]);
+
+    printf("Enter B:\n");
+    for (int i = 0; i < n; i++)
+        scanf("%d", &B[i]);
+
+    printf("Enter C:\n");
+    for (int i = 0; i < n; i++)
+        scanf("%d", &C[i]);
+
+    printf("Enter D:\n");
+    for (int i = 0; i < n; i++)
+        scanf("%d", &D[i]);
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            for (int k = 0; k < n; k++)
+            {
+                for (int l = 0; l < n; l++)
+                {
+                    if (A[i] + B[j] + C[k] + D[l] == 0)
+                        count++;
+                }
+            }
+        }
+    }
+
+    printf("\nNumber of Tuples = %lld", count);
+
+    return 0;
+}
